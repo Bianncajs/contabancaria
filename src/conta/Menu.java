@@ -118,14 +118,63 @@ ContaController contas = new ContaController();
                 break;
             case 3:
                 System.out.println(Cores.TEXT_WHITE_BOLD + "Consultar dados da Conta - por número\n\n");
+                
+                System.out.println("Digite o número da conta: ");
+                numero = scanner.nextInt();
+                
+                contas.procurarPorNumero(numero);
+                
                 keyPress();
                 break;
             case 4:
-                System.out.println(Cores.TEXT_WHITE_BOLD + "Atualizar dados da Conta\n\n");
+               System.out.println("Atualizar dados da Conta\n\n");
+
+                System.out.println("Digite o número da conta: ");
+                numero = scanner.nextInt();
+
+                var buscaConta = contas.buscarNaCollection(numero);
+
+                if (buscaConta != null) {
+                	
+                    tipo = buscaConta.getTipo();
+
+                    System.out.println("Digite o Número da Agência: ");
+                    agencia = scanner.nextInt();
+                    System.out.println("Digite o Nome do Titular: ");
+                    scanner.skip("\\R?");
+                    titular = scanner.nextLine();
+
+                    System.out.println("Digite o Saldo da Conta (R$): ");
+                    saldo = scanner.nextFloat();
+
+                    switch (tipo) {
+                        case 1 -> {
+                            System.out.println("Digite o Limite de Crédito (R$): ");
+                            limite = scanner.nextFloat();
+                            contas.atualizar(new ContaCorrente(numero, agencia, tipo, titular, saldo, limite));
+                        }
+                        case 2 -> {
+                            System.out.println("Digite o dia do Aniversário da Conta: ");
+                            aniversario = scanner.nextInt();
+                            contas.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
+                        }
+                        default -> System.out.println("Tipo de conta inválido");
+                    }
+                } else {
+                    System.out.println("A Conta não foi encontrada!");
+                }
                 keyPress();
                 break;
+                
             case 5:
                 System.out.println(Cores.TEXT_WHITE_BOLD + "Apagar a Conta\n\n");
+                
+                System.out.println("Digite o número da conta: ");
+                numero = scanner.nextInt();
+                
+                contas.deletar(numero);
+                
+                
                 keyPress();
                 break;
             case 6:
